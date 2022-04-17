@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -21,7 +20,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserAccount {
+public class UserAccountEntity {
     @Id
     @GeneratedValue
     private UUID id;
@@ -35,7 +34,7 @@ public class UserAccount {
     private String password;
 
     @OneToOne(mappedBy = "user")
-    private Institution institution;
+    private InstitutionEntity institutionEntity;
 
     @ManyToMany
     @JoinTable(
@@ -43,9 +42,9 @@ public class UserAccount {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private List<Role> roles;
+    private List<RoleEntity> roles;
 
-    public UserAccount(String name, String surname, String email, String password, List<Role> roles) {
+    public UserAccountEntity(String name, String surname, String email, String password, List<RoleEntity> roles) {
         this.name = name;
         this.surname = surname;
         this.email = email;

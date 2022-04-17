@@ -8,10 +8,8 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.UUID;
@@ -20,7 +18,7 @@ import java.util.UUID;
 @Table(name = "institution")
 @Getter
 @Setter
-public class Institution {
+public class InstitutionEntity {
     @Id
     @GeneratedValue
     private UUID id;
@@ -45,9 +43,9 @@ public class Institution {
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private UserAccount user;
+    private UserAccountEntity user;
 
-    public Institution(
+    public InstitutionEntity(
             String identificationNumber,
             String name,
             com.master.authservice.domain.Entity entity,
@@ -56,7 +54,7 @@ public class Institution {
             String address,
             String phoneNumber,
             boolean approved,
-            UserAccount user
+            UserAccountEntity user
     ) {
         this.identificationNumber = identificationNumber;
         this.name = name;

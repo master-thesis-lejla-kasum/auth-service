@@ -3,9 +3,9 @@ package com.master.authservice;
 import com.master.authservice.domain.Canton;
 import com.master.authservice.domain.Entity;
 import com.master.authservice.domain.Municipality;
-import com.master.authservice.model.Institution;
-import com.master.authservice.model.Role;
-import com.master.authservice.model.UserAccount;
+import com.master.authservice.model.InstitutionEntity;
+import com.master.authservice.model.RoleEntity;
+import com.master.authservice.model.UserAccountEntity;
 import com.master.authservice.repository.InstitutionRepository;
 import com.master.authservice.repository.RoleRepository;
 import com.master.authservice.repository.UserRepository;
@@ -34,16 +34,16 @@ public class AuthServiceApplication {
             InstitutionRepository institutionRepository
     ) {
         return(args) -> {
-            Role role1 = roleRepository.save(new Role("Administrator"));
-            Role role2 = roleRepository.save(new Role("Covid Statistic Provider"));
-            Role role3 = roleRepository.save(new Role("Covid Rules Provider"));
+            RoleEntity roleEntity1 = roleRepository.save(new RoleEntity("Administrator"));
+            RoleEntity roleEntity2 = roleRepository.save(new RoleEntity("Covid Statistic Provider"));
+            RoleEntity roleEntity3 = roleRepository.save(new RoleEntity("Covid Rules Provider"));
             logger.info("Role table seeded");
 
-            UserAccount user1 = userRepository.save(new UserAccount("Roger", "Federer", "roger@mail.com", "pass123", Arrays.asList(role1)));
-            UserAccount user2 = userRepository.save(new UserAccount("Rafa", "Nadal", "rafa@mail.com", "pass123", Arrays.asList(role2, role3)));
+            UserAccountEntity user1 = userRepository.save(new UserAccountEntity("Roger", "Federer", "roger@mail.com", "pass123", Arrays.asList(roleEntity1)));
+            UserAccountEntity user2 = userRepository.save(new UserAccountEntity("Rafa", "Nadal", "rafa@mail.com", "pass123", Arrays.asList(roleEntity2, roleEntity3)));
             logger.info("User table seeded");
 
-            Institution institution = institutionRepository.save(new Institution(
+            InstitutionEntity institutionEntity = institutionRepository.save(new InstitutionEntity(
                     "id-inst-number",
                     "Dom zdravlja",
                     Entity.FBIH,
