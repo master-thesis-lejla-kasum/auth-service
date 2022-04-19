@@ -1,5 +1,8 @@
 package com.master.authservice.model;
 
+import com.master.authservice.domain.Account;
+import com.master.authservice.domain.Institution;
+import com.master.authservice.domain.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +17,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "account")
@@ -50,5 +54,36 @@ public class UserAccountEntity {
         this.email = email;
         this.password = password;
         this.roles = roles;
+    }
+
+    public Account toDomain() {
+        Account account = new Account();
+        account.setId(this.id);
+        account.setName(this.name);
+        account.setSurname(this.surname);
+        account.setEmail(this.email);
+
+        if (this.institutionEntity != null) {
+            Institution institution = new Institution();
+            institution.setId(this.institutionEntity.getId());
+            institution.setIdentificationNumber(this.institutionEntity.getIdentificationNumber());
+            institution.setName(this.institutionEntity.getName());
+            institution.setEntity(this.institutionEntity.getEntity());
+            institution.setCanton(this.institutionEntity.getCanton());
+            institution.setMunicipality(this.institutionEntity.getMunicipality());
+            institution.setAddress(this.institutionEntity.getAddress());
+            institution.setPhoneNumber(this.institutionEntity.getPhoneNumber());
+            institution.setApproved(this.institutionEntity.isApproved());
+
+            account.setInstitution(institution);
+        }
+
+        List<Role> roles = this.roles.stream()
+                .map(roleEntity -> roleEntity.toDomain())
+                .collect(Collectors.toList());
+
+        account.setRoles(roles);
+
+        return account;
     }
 }

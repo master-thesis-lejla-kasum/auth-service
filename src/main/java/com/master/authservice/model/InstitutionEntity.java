@@ -1,8 +1,11 @@
 package com.master.authservice.model;
 
+import com.master.authservice.domain.Account;
 import com.master.authservice.domain.Canton;
+import com.master.authservice.domain.Institution;
 import com.master.authservice.domain.Municipality;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
@@ -18,6 +21,7 @@ import java.util.UUID;
 @Table(name = "institution")
 @Getter
 @Setter
+@NoArgsConstructor
 public class InstitutionEntity {
     @Id
     @GeneratedValue
@@ -65,5 +69,28 @@ public class InstitutionEntity {
         this.phoneNumber = phoneNumber;
         this.approved = approved;
         this.user = user;
+    }
+
+    public Institution toDomain() {
+        Institution institution = new Institution();
+        institution.setId(this.getId());
+        institution.setIdentificationNumber(this.getIdentificationNumber());
+        institution.setName(this.getName());
+        institution.setEntity(this.getEntity());
+        institution.setCanton(this.getCanton());
+        institution.setMunicipality(this.getMunicipality());
+        institution.setAddress(this.getAddress());
+        institution.setPhoneNumber(this.getPhoneNumber());
+        institution.setApproved(this.isApproved());
+
+        Account account = new Account();
+        account.setId(this.user.getId());
+        account.setName(this.user.getName());
+        account.setSurname(this.user.getSurname());
+        account.setEmail(this.user.getEmail());
+
+        institution.setAccount(account);
+
+        return institution;
     }
 }

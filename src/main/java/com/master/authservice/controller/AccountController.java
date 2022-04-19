@@ -1,7 +1,7 @@
 package com.master.authservice.controller;
 
-import com.master.authservice.domain.Role;
-import com.master.authservice.service.RoleService;
+import com.master.authservice.domain.Account;
+import com.master.authservice.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,36 +19,35 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/role")
-public class RoleController {
-
+@RequestMapping("/api/v1/account")
+public class AccountController {
     @Autowired
-    private RoleService roleService;
+    private AccountService accountService;
 
     @GetMapping
-    public List<Role> getAll() {
-        return roleService.getAll();
+    public List<Account> getAll() {
+        return accountService.getAll();
     }
 
     @GetMapping("/{id}")
-    public Role getById(@PathVariable UUID id) {
-        return roleService.getById(id);
+    public Account getById(@PathVariable UUID id) {
+        return accountService.getById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Valid
-    public Role create(@Valid @RequestBody Role role) {
-        return roleService.add(role);
+    public Account create(@Valid @RequestBody Account role) {
+        return accountService.add(role);
     }
 
     @PutMapping("/{id}")
-    public Role update(@PathVariable UUID id, @RequestBody Role role) {
-        return roleService.update(id, role);
+    public Account update(@PathVariable UUID id, @RequestBody Account role) {
+        return accountService.update(id, role);
     }
 
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable UUID id) {
-        roleService.deleteById(id);
+        accountService.deleteById(id);
     }
 }
