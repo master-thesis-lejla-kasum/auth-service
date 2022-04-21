@@ -18,7 +18,9 @@ public class ErrorMessage {
     public enum ErrorType {
         NOT_FOUND(HttpStatus.NOT_FOUND),
         BAD_REQUEST(HttpStatus.BAD_REQUEST),
-        INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR);
+        INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR),
+        UNAUTHORIZED(HttpStatus.UNAUTHORIZED),
+        FORBIDDEN(HttpStatus.FORBIDDEN);
 
         @Getter
         private final HttpStatus status;

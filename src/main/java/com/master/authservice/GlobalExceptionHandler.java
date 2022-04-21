@@ -1,5 +1,8 @@
 package com.master.authservice;
 
+import com.master.authservice.exceptions.AccessForbiddenException;
+import com.master.authservice.exceptions.AccessUnauthorizedException;
+import com.master.authservice.exceptions.BadRequestException;
 import com.master.authservice.exceptions.EntityNotFoundException;
 import com.master.authservice.exceptions.ErrorMessage;
 import org.slf4j.Logger;
@@ -23,6 +26,27 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorMessage, errorMessage.getStatus().getStatus());
     }
 
+    @ExceptionHandler(value = BadRequestException.class)
+    public ResponseEntity<ErrorMessage> handleBadRequestException(BadRequestException ex) {
+
+        ErrorMessage errorMessage = new ErrorMessage(new Date(), ErrorMessage.ErrorType.BAD_REQUEST, ex.getMessage());
+        return new ResponseEntity<>(errorMessage, errorMessage.getStatus().getStatus());
+    }
+
+    @ExceptionHandler(value = AccessUnauthorizedException.class)
+    public ResponseEntity<ErrorMessage> handleAccessUnauthorizedException(AccessUnauthorizedException ex) {
+
+        ErrorMessage errorMessage = new ErrorMessage(new Date(), ErrorMessage.ErrorType.UNAUTHORIZED, ex.getMessage());
+        return new ResponseEntity<>(errorMessage, errorMessage.getStatus().getStatus());
+    }
+
+    @ExceptionHandler(value = AccessForbiddenException.class)
+    public ResponseEntity<ErrorMessage> handleAccessForbiddenException(AccessForbiddenException ex) {
+
+        ErrorMessage errorMessage = new ErrorMessage(new Date(), ErrorMessage.ErrorType.FORBIDDEN, ex.getMessage());
+        return new ResponseEntity<>(errorMessage, errorMessage.getStatus().getStatus());
+    }
+
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessage> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         String message = ex.getAllErrors().get(0).getDefaultMessage();
@@ -33,7 +57,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ErrorMessage> handleUnmanagedExceptions(Exception ex) {
         LOGGER.error("Caught unknown exception", ex);
-        ErrorMessage errorMessage = new ErrorMessage(new Date(), ErrorMessage.ErrorType.BAD_REQUEST, "Something went wrong");
+        ErrorMessage errorMessage = new ErrorMessage(new Date(), ErrorMessage.ErrorType.INTERNAL_SERVER_ERROR, "Something went wrong");
         return new ResponseEntity<>(errorMessage, errorMessage.getStatus().getStatus());
     }
 }

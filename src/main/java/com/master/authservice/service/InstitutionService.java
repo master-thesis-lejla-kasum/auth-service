@@ -1,10 +1,12 @@
 package com.master.authservice.service;
 
 import com.master.authservice.domain.Institution;
+import com.master.authservice.exceptions.BadRequestException;
 import com.master.authservice.exceptions.EntityNotFoundException;
 import com.master.authservice.model.InstitutionEntity;
 import com.master.authservice.model.UserAccountEntity;
 import com.master.authservice.repository.InstitutionRepository;
+import com.master.authservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,9 @@ import java.util.stream.Collectors;
 public class InstitutionService {
     @Autowired
     InstitutionRepository institutionRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     public List<Institution> getAll() {
         return institutionRepository.findAll().stream()
@@ -41,6 +46,8 @@ public class InstitutionService {
         entity.setAddress(institution.getAddress());
         entity.setPhoneNumber(institution.getPhoneNumber());
         entity.setApproved(institution.isApproved());
+
+        checkAccountExists(institution.getAccount().getId());
 
         UserAccountEntity userEntity = new UserAccountEntity();
         userEntity.setId(institution.getAccount().getId());
@@ -67,6 +74,8 @@ public class InstitutionService {
         entity.setPhoneNumber(institution.getPhoneNumber());
         entity.setApproved(institution.isApproved());
 
+        checkAccountExists(institution.getAccount().getId());
+
         UserAccountEntity userEntity = new UserAccountEntity();
         userEntity.setId(institution.getAccount().getId());
 
@@ -80,5 +89,11 @@ public class InstitutionService {
             throw new EntityNotFoundException(String.format("Institution with id=%s does not exist.", id));
         }
         institutionRepository.deleteById(id);
+    }
+
+    private void checkAccountExists(UUID id) {
+        if (!userRepository.existsById(id)) {
+            throw new BadRequestException(String.format("Account with id=%s does not exists.", id));
+        }
     }
 }

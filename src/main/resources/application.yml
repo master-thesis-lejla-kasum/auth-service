@@ -7,3 +7,5 @@ spring:
     url: "jdbc:postgresql://localhost:5432/auth-db"
     username: admin
     password: admin
+
+secret-key: secret

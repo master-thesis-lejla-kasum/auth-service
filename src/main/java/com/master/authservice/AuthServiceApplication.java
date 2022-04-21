@@ -9,6 +9,7 @@ import com.master.authservice.model.UserAccountEntity;
 import com.master.authservice.repository.InstitutionRepository;
 import com.master.authservice.repository.RoleRepository;
 import com.master.authservice.repository.UserRepository;
+import com.master.authservice.util.PasswordUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -34,13 +35,14 @@ public class AuthServiceApplication {
             InstitutionRepository institutionRepository
     ) {
         return(args) -> {
-            RoleEntity roleEntity1 = roleRepository.save(new RoleEntity("Administrator"));
+            RoleEntity roleEntity1 = roleRepository.save(new RoleEntity("Admin"));
             RoleEntity roleEntity2 = roleRepository.save(new RoleEntity("Covid Statistic Provider"));
             RoleEntity roleEntity3 = roleRepository.save(new RoleEntity("Covid Rules Provider"));
+            RoleEntity roleEntity4 = roleRepository.save(new RoleEntity("Institution"));
             logger.info("Role table seeded");
 
-            UserAccountEntity user1 = userRepository.save(new UserAccountEntity("Roger", "Federer", "roger@mail.com", "pass123", Arrays.asList(roleEntity1)));
-            UserAccountEntity user2 = userRepository.save(new UserAccountEntity("Rafa", "Nadal", "rafa@mail.com", "pass123", Arrays.asList(roleEntity2, roleEntity3)));
+            UserAccountEntity user1 = userRepository.save(new UserAccountEntity("Roger", "Federer", "roger@mail.com", PasswordUtil.hashPassword("pass123"), Arrays.asList(roleEntity1)));
+            UserAccountEntity user2 = userRepository.save(new UserAccountEntity("Rafa", "Nadal", "rafa@mail.com", PasswordUtil.hashPassword("pass123"), Arrays.asList(roleEntity2, roleEntity3, roleEntity4)));
             logger.info("User table seeded");
 
             InstitutionEntity institutionEntity = institutionRepository.save(new InstitutionEntity(

@@ -2,10 +2,13 @@ package com.master.authservice.service;
 
 import com.master.authservice.domain.Account;
 import com.master.authservice.domain.Role;
+import com.master.authservice.exceptions.BadRequestException;
 import com.master.authservice.exceptions.EntityNotFoundException;
 import com.master.authservice.model.RoleEntity;
 import com.master.authservice.model.UserAccountEntity;
+import com.master.authservice.repository.RoleRepository;
 import com.master.authservice.repository.UserRepository;
+import com.master.authservice.util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,8 @@ import java.util.stream.Collectors;
 public class AccountService {
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    RoleRepository roleRepository;
 
     public List<Account> getAll() {
         return userRepository.findAll().stream()
@@ -37,7 +42,9 @@ public class AccountService {
         entity.setName(account.getName());
         entity.setSurname(account.getSurname());
         entity.setEmail(account.getEmail());
-        entity.setPassword(account.getPassword());
+        entity.setPassword(PasswordUtil.hashPassword(account.getPassword()));
+
+        checkRolesExist(account.getRoles());
 
         List<RoleEntity> roles = domainRolesToEntities(account.getRoles());
 
@@ -57,6 +64,8 @@ public class AccountService {
         entity.setSurname(account.getSurname());
         entity.setEmail(account.getEmail());
         entity.setPassword(account.getPassword());
+
+        checkRolesExist(account.getRoles());
 
         List<RoleEntity> roles = domainRolesToEntities(account.getRoles());
 
@@ -80,5 +89,13 @@ public class AccountService {
                     return roleEntity;
                 })
                 .collect(Collectors.toList());
+    }
+
+    private void checkRolesExist(List<Role> roles) {
+        roles.forEach(role -> {
+            if (!roleRepository.existsById(role.getId())) {
+                throw new  BadRequestException(String.format("Role with id=%s does not exists.", role.getId()));
+            }
+        });
     }
 }
