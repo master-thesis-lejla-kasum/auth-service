@@ -9,3 +9,6 @@ spring:
     password: admin
 
 secret-key: secret
+
+server:
+  port: 8080

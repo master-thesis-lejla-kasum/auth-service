@@ -1,6 +1,7 @@
 package com.master.authservice.service;
 
-import com.master.authservice.dto.AuthResponse;
+import com.master.authservice.domain.AuthResponse;
+import com.master.authservice.dto.LoginResponse;
 import com.master.authservice.dto.LoginRequest;
 import com.master.authservice.exceptions.AccessForbiddenException;
 import com.master.authservice.exceptions.AccessUnauthorizedException;
@@ -18,11 +19,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.SignatureException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,7 +76,7 @@ public class AuthService {
         }
     }
 
-    public AuthResponse login(LoginRequest loginRequest) {
+    public LoginResponse login(LoginRequest loginRequest) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
@@ -88,7 +90,34 @@ public class AuthService {
 
         final String token = JwtUtil.generateToken(userDetails, SECRET_KEY, false);
 
-        return new AuthResponse(token);
+        return new LoginResponse(token);
+    }
+
+    public AuthResponse authenticateWithToken(String token) {
+        try {
+            String email = JwtUtil.extractUsername(token, SECRET_KEY);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+
+            if (!JwtUtil.validateToken(token, userDetails, SECRET_KEY)) {
+                throw new AccessUnauthorizedException("Invalid token.");
+            }
+
+            UserAccountEntity account = userRepository.findByEmail(email);
+            List<SimpleGrantedAuthority> authorities = account.getRoles().stream()
+                    .map(role -> new SimpleGrantedAuthority(role.getName()))
+                    .collect(Collectors.toList());
+            User user = new User(account.getEmail(), account.getPassword(), authorities);
+
+            List<String> userAuthorities = user.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toList());
+
+            return new AuthResponse(user.getUsername(), user.getPassword(), userAuthorities);
+        } catch (Exception e) {
+            throw new AccessUnauthorizedException("Invalid token.");
+        }
+
+
     }
 
     private String hashPassword(String password) {
