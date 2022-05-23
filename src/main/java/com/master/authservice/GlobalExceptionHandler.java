@@ -1,10 +1,6 @@
 package com.master.authservice;
 
-import com.master.authservice.exceptions.AccessForbiddenException;
-import com.master.authservice.exceptions.AccessUnauthorizedException;
-import com.master.authservice.exceptions.BadRequestException;
-import com.master.authservice.exceptions.EntityNotFoundException;
-import com.master.authservice.exceptions.ErrorMessage;
+import com.master.authservice.exceptions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +40,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorMessage> handleAccessForbiddenException(AccessForbiddenException ex) {
 
         ErrorMessage errorMessage = new ErrorMessage(new Date(), ErrorMessage.ErrorType.FORBIDDEN, ex.getMessage());
+        return new ResponseEntity<>(errorMessage, errorMessage.getStatus().getStatus());
+    }
+
+    @ExceptionHandler(value = ExternalServiceException.class)
+    public ResponseEntity<ErrorMessage> handleExternalServiceException(ExternalServiceException ex) {
+
+        ErrorMessage errorMessage = new ErrorMessage(new Date(), ErrorMessage.ErrorType.INTERNAL_SERVER_ERROR, ex.getMessage());
         return new ResponseEntity<>(errorMessage, errorMessage.getStatus().getStatus());
     }
 

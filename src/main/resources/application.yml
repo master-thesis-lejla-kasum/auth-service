@@ -12,3 +12,7 @@ secret-key: secret
 
 server:
   port: 8080
+
+covid-service:
+  base-url: http://localhost:8081
+  path: /api/v1/institution
