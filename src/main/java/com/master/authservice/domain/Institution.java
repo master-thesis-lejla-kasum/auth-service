@@ -1,6 +1,8 @@
 package com.master.authservice.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
@@ -10,6 +12,8 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Institution {
     private UUID id;
     @NotEmpty(message = "Identification number cannot be null or empty.")

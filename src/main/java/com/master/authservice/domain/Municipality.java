@@ -9,7 +9,8 @@ public enum Municipality {
     JAJCE("Jajce"),
     SARAJEVO("Sarajevo"),
     BANJA_LUKA("Banja Luka"),
-    MOSTAR("Mostar");
+    MOSTAR("Mostar"),
+    BRCKO("Brcko");
 
     @Getter
     private final String label;

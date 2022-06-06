@@ -2,6 +2,7 @@ package com.master.authservice;
 
 import com.master.authservice.domain.Canton;
 import com.master.authservice.domain.Entity;
+import com.master.authservice.domain.Institution;
 import com.master.authservice.domain.Municipality;
 import com.master.authservice.model.InstitutionEntity;
 import com.master.authservice.model.RoleEntity;
@@ -9,6 +10,7 @@ import com.master.authservice.model.UserAccountEntity;
 import com.master.authservice.repository.InstitutionRepository;
 import com.master.authservice.repository.RoleRepository;
 import com.master.authservice.repository.UserRepository;
+import com.master.authservice.service.InstitutionService;
 import com.master.authservice.util.PasswordUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +42,8 @@ public class AuthServiceApplication {
     public CommandLineRunner addData(
             RoleRepository roleRepository,
             UserRepository userRepository,
-            InstitutionRepository institutionRepository
+            InstitutionRepository institutionRepository,
+            InstitutionService institutionService
     ) {
         return(args) -> {
             RoleEntity roleEntity1 = roleRepository.save(new RoleEntity("Admin"));
@@ -53,16 +56,17 @@ public class AuthServiceApplication {
             UserAccountEntity user2 = userRepository.save(new UserAccountEntity("Rafa", "Nadal", "rafa@mail.com", PasswordUtil.hashPassword("pass123"), Arrays.asList(roleEntity2, roleEntity3, roleEntity4)));
             logger.info("User table seeded");
 
-            InstitutionEntity institutionEntity = institutionRepository.save(new InstitutionEntity(
+            Institution institution = institutionService.add(new Institution(
+                    null,
                     "id-inst-number",
-                    "Dom zdravlja",
+                    "Dom zdravlja Novi Grad",
                     Entity.FBIH,
                     Canton.KS,
                     Municipality.SARAJEVO,
                     "Adresa",
                     "123-123-123",
                     false,
-                    user2
+                    user2.toDomain()
             ));
             logger.info("Institution table seeded");
         };

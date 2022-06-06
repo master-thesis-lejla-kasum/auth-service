@@ -12,6 +12,7 @@ import com.master.authservice.util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -44,9 +45,9 @@ public class AccountService {
         entity.setEmail(account.getEmail());
         entity.setPassword(PasswordUtil.hashPassword(account.getPassword()));
 
-        checkRolesExist(account.getRoles());
+        checkRolesExist(account.getRoles() != null ? account.getRoles() : new ArrayList<>());
 
-        List<RoleEntity> roles = domainRolesToEntities(account.getRoles());
+        List<RoleEntity> roles = domainRolesToEntities(account.getRoles() != null ? account.getRoles() : new ArrayList<>());
 
         entity.setRoles(roles);
 
@@ -65,9 +66,9 @@ public class AccountService {
         entity.setEmail(account.getEmail());
         entity.setPassword(account.getPassword());
 
-        checkRolesExist(account.getRoles());
+        checkRolesExist(account.getRoles() != null ? account.getRoles() : new ArrayList<>());
 
-        List<RoleEntity> roles = domainRolesToEntities(account.getRoles());
+        List<RoleEntity> roles = domainRolesToEntities(account.getRoles() != null ? account.getRoles() : new ArrayList<>());
 
         entity.setRoles(roles);
 

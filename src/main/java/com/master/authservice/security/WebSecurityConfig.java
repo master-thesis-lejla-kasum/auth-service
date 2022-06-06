@@ -65,8 +65,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, "/api/v1/account/{id}")
                 .hasAnyAuthority("Admin")
 
+
                 .antMatchers(HttpMethod.GET, "/api/v1/institution")
-                .hasAnyAuthority("Admin", "Institution")
+                .hasAuthority("Admin")
                 .antMatchers(HttpMethod.GET, "/api/v1/institution/{id}")
                 .hasAnyAuthority("Admin", "Institution")
                 .antMatchers(HttpMethod.PUT, "/api/v1/institution/{id}")
@@ -87,7 +88,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("*"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
