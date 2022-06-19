@@ -1,11 +1,13 @@
 package com.master.authservice.service;
 
 import com.master.authservice.domain.Institution;
+import com.master.authservice.dto.InstitutionResponseDto;
+import com.master.authservice.dto.InstitutionSearchRequest;
 import com.master.authservice.exceptions.BadRequestException;
 import com.master.authservice.exceptions.EntityNotFoundException;
 import com.master.authservice.model.InstitutionEntity;
 import com.master.authservice.model.UserAccountEntity;
-import com.master.authservice.repository.InstitutionRepository;
+import com.master.authservice.repository.institution.InstitutionRepository;
 import com.master.authservice.repository.UserRepository;
 import com.master.authservice.rest.CovidServiceClient;
 import com.master.authservice.rest.dto.InstitutionDto;
@@ -30,17 +32,17 @@ public class InstitutionService {
     @Autowired
     private CovidServiceClient covidClient;
 
-    public List<Institution> getAll() {
-        return institutionRepository.findAll().stream()
-                .map(InstitutionEntity::toDomain)
+    public List<InstitutionResponseDto> getAll(InstitutionSearchRequest request) {
+        return institutionRepository.search(request).stream()
+                .map(InstitutionEntity::toDto)
                 .collect(Collectors.toList());
     }
 
-    public Institution getById(UUID id) {
+    public InstitutionResponseDto getById(UUID id) {
         if (!institutionRepository.existsById(id)) {
             throw new EntityNotFoundException(String.format("Institution with id=%s does not exist.", id));
         }
-        return institutionRepository.findById(id).get().toDomain();
+        return institutionRepository.findById(id).get().toDto();
     }
 
     public Institution add(Institution institution) {

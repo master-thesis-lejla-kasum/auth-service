@@ -1,6 +1,8 @@
 package com.master.authservice.controller;
 
 import com.master.authservice.domain.Institution;
+import com.master.authservice.dto.InstitutionResponseDto;
+import com.master.authservice.dto.InstitutionSearchRequest;
 import com.master.authservice.service.InstitutionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,12 +19,15 @@ public class InstitutionController {
     private InstitutionService institutionService;
 
     @GetMapping
-    public List<Institution> getAll() {
-        return institutionService.getAll();
+    public List<InstitutionResponseDto> getAll(
+            @RequestParam(required = false) Boolean approved,
+            @RequestParam(required = false) String name
+    ) {
+        return institutionService.getAll(new InstitutionSearchRequest(approved, name));
     }
 
     @GetMapping("/{id}")
-    public Institution getById(@PathVariable UUID id) {
+    public InstitutionResponseDto getById(@PathVariable UUID id) {
         return institutionService.getById(id);
     }
 

@@ -4,6 +4,7 @@ import com.master.authservice.domain.Account;
 import com.master.authservice.domain.Canton;
 import com.master.authservice.domain.Institution;
 import com.master.authservice.domain.Municipality;
+import com.master.authservice.dto.InstitutionResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -79,6 +80,29 @@ public class InstitutionEntity {
         institution.setEntity(this.getEntity());
         institution.setCanton(this.getCanton());
         institution.setMunicipality(this.getMunicipality());
+        institution.setAddress(this.getAddress());
+        institution.setPhoneNumber(this.getPhoneNumber());
+        institution.setApproved(this.isApproved());
+
+        Account account = new Account();
+        account.setId(this.user.getId());
+        account.setName(this.user.getName());
+        account.setSurname(this.user.getSurname());
+        account.setEmail(this.user.getEmail());
+
+        institution.setAccount(account);
+
+        return institution;
+    }
+
+    public InstitutionResponseDto toDto() {
+        InstitutionResponseDto institution = new InstitutionResponseDto();
+        institution.setId(this.getId());
+        institution.setIdentificationNumber(this.getIdentificationNumber());
+        institution.setName(this.getName());
+        institution.setEntity(this.getEntity() != null ? this.getEntity().name() : "");
+        institution.setCanton(this.getCanton() != null ? this.getCanton().name() : "");
+        institution.setMunicipality(this.getMunicipality() != null ? this.getMunicipality().getLabel() : "");
         institution.setAddress(this.getAddress());
         institution.setPhoneNumber(this.getPhoneNumber());
         institution.setApproved(this.isApproved());
