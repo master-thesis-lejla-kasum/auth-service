@@ -19,7 +19,7 @@ public class InstitutionController {
     private InstitutionService institutionService;
 
     @GetMapping
-    public List<InstitutionResponseDto> getAll(
+    public List<Institution> getAll(
             @RequestParam(required = false) Boolean approved,
             @RequestParam(required = false) String name
     ) {
@@ -27,7 +27,7 @@ public class InstitutionController {
     }
 
     @GetMapping("/{id}")
-    public InstitutionResponseDto getById(@PathVariable UUID id) {
+    public Institution getById(@PathVariable UUID id) {
         return institutionService.getById(id);
     }
 

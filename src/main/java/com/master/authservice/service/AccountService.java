@@ -61,10 +61,10 @@ public class AccountService {
         }
 
         UserAccountEntity entity = userEntity.get();
-        entity.setName(account.getName());
-        entity.setSurname(account.getSurname());
-        entity.setEmail(account.getEmail());
-        entity.setPassword(account.getPassword());
+        entity.setName(account.getName() != null ? account.getName() : entity.getName());
+        entity.setSurname(account.getSurname() != null ? account.getSurname() : entity.getSurname());
+        entity.setEmail(account.getEmail() != null ? account.getEmail() : entity.getEmail());
+        entity.setPassword(account.getPassword() != null ? account.getPassword() : entity.getPassword());
 
         checkRolesExist(account.getRoles() != null ? account.getRoles() : new ArrayList<>());
 

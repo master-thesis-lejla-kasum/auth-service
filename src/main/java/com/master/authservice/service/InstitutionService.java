@@ -32,17 +32,17 @@ public class InstitutionService {
     @Autowired
     private CovidServiceClient covidClient;
 
-    public List<InstitutionResponseDto> getAll(InstitutionSearchRequest request) {
+    public List<Institution> getAll(InstitutionSearchRequest request) {
         return institutionRepository.search(request).stream()
-                .map(InstitutionEntity::toDto)
+                .map(InstitutionEntity::toDomain)
                 .collect(Collectors.toList());
     }
 
-    public InstitutionResponseDto getById(UUID id) {
+    public Institution getById(UUID id) {
         if (!institutionRepository.existsById(id)) {
             throw new EntityNotFoundException(String.format("Institution with id=%s does not exist.", id));
         }
-        return institutionRepository.findById(id).get().toDto();
+        return institutionRepository.findById(id).get().toDomain();
     }
 
     public Institution add(Institution institution) {
