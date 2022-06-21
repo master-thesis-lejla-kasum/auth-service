@@ -38,7 +38,8 @@ public class JwtUtil {
         claims.put("roles", userDetails.getAuthorities());
         claims.put("id", userDetails.getUserId());
         claims.put("username", userDetails.getUsername());
-        Integer expTimeMilis = 1000*60*60;
+        claims.put("institutionId", userDetails.getInstitutionId());
+        Integer expTimeMilis = 1000*60*60*8;
         if(isRefreshToken) {
             expTimeMilis = expTimeMilis + 1000*60*5;
         }

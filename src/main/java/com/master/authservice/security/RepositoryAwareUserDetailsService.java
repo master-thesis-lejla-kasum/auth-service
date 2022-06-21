@@ -31,6 +31,6 @@ public class RepositoryAwareUserDetailsService implements UserDetailsService {
         List<SimpleGrantedAuthority> authorities = userAccount.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
-        return new CustomUserDetails(userAccount.getEmail(), userAccount.getPassword(), authorities, userAccount.getId());
+        return new CustomUserDetails(userAccount.getEmail(), userAccount.getPassword(), authorities, userAccount.getId(), userAccount.getInstitutionEntity().getId());
     }
 }

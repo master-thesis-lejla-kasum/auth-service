@@ -10,10 +10,12 @@ import java.util.UUID;
 public class CustomUserDetails extends User {
 
     private UUID userId;
+    private UUID institutionId;
 
-    public CustomUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities, UUID userId) {
+    public CustomUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities, UUID userId, UUID institutionId) {
         super(username, password, authorities);
         this.userId = userId;
+        this.institutionId = institutionId;
     }
 
     public UUID getUserId() {
@@ -22,5 +24,13 @@ public class CustomUserDetails extends User {
 
     public void setUserId(UUID userId) {
         this.userId = userId;
+    }
+
+    public UUID getInstitutionId() {
+        return institutionId;
+    }
+
+    public void setInstitutionId(UUID institutionId) {
+        this.institutionId = institutionId;
     }
 }
